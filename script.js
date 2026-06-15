@@ -87,7 +87,7 @@ const fragrances = [
         arabic: "ماهر",
         price: 30,
         category: "unisex",
-        description: "Depending on the bottle (Silver is fresh/citrus, Black is intensely smoky leather/oud, Classic Gold is fruity/woody), the classic Maahir is a rich, regal blend of peach, bergamot, smoke, and smooth amber woods.",
+        description: "Depending on the bottle (Silver is fresh/citrus, Black is intensely smoky leather/oud, Classic Gold is fruity/woody), the classic Maahir is a rich, regal blend of peach, bergamot, and amber.",
         season: "Autumn / Winter"
     },
     {
@@ -109,6 +109,147 @@ const fragrances = [
         season: "Winter / Autumn"
     }
 ];
+
+// Shopping Cart
+let cart = JSON.parse(localStorage.getItem('cart')) || [];
+
+function saveCart() {
+    localStorage.setItem('cart', JSON.stringify(cart));
+}
+
+function addToCart(fragranceId) {
+    const fragrance = fragrances.find(f => f.id === fragranceId);
+    if (!fragrance) return;
+
+    const existingItem = cart.find(item => item.id === fragranceId);
+    if (existingItem) {
+        existingItem.quantity += 1;
+    } else {
+        cart.push({ ...fragrance, quantity: 1 });
+    }
+    
+    saveCart();
+    updateCartIcon();
+    showNotification(`✅ ${fragrance.name} added to cart!`);
+}
+
+function removeFromCart(fragranceId) {
+    cart = cart.filter(item => item.id !== fragranceId);
+    saveCart();
+    renderCart();
+    updateCartIcon();
+}
+
+function updateQuantity(fragranceId, quantity) {
+    const item = cart.find(item => item.id === fragranceId);
+    if (item) {
+        item.quantity = Math.max(1, quantity);
+        saveCart();
+        renderCart();
+        updateCartIcon();
+    }
+}
+
+function updateCartIcon() {
+    const cartIcon = document.getElementById('cartIcon');
+    const cartCount = document.getElementById('cartCount');
+    const totalItems = cart.reduce((sum, item) => sum + item.quantity, 0);
+    
+    if (cartCount) {
+        cartCount.textContent = totalItems;
+        cartCount.style.display = totalItems > 0 ? 'block' : 'none';
+    }
+}
+
+function renderCart() {
+    const cartItems = document.getElementById('cartItems');
+    const cartTotal = document.getElementById('cartTotal');
+    
+    if (!cartItems) return;
+
+    if (cart.length === 0) {
+        cartItems.innerHTML = '<p style="text-align: center; padding: 2rem;">Your cart is empty</p>';
+        if (cartTotal) cartTotal.innerHTML = '<strong>Total: $0.00</strong>';
+        return;
+    }
+
+    cartItems.innerHTML = cart.map(item => `
+        <div class="cart-item">
+            <div class="cart-item-info">
+                <h3>${item.name}</h3>
+                <p>${item.arabic}</p>
+                <p class="price">$${item.price}</p>
+            </div>
+            <div class="cart-item-controls">
+                <input type="number" min="1" value="${item.quantity}" 
+                    onchange="updateQuantity(${item.id}, this.value)">
+                <button onclick="removeFromCart(${item.id})" class="btn-remove">Remove</button>
+            </div>
+            <div class="cart-item-total">
+                $${(item.price * item.quantity).toFixed(2)}
+            </div>
+        </div>
+    `).join('');
+
+    const total = cart.reduce((sum, item) => sum + (item.price * item.quantity), 0);
+    if (cartTotal) {
+        cartTotal.innerHTML = `<strong>Total: $${total.toFixed(2)}</strong>`;
+    }
+}
+
+function openCart() {
+    const modal = document.getElementById('cartModal');
+    if (modal) {
+        modal.style.display = 'block';
+        renderCart();
+    }
+}
+
+function closeCart() {
+    const modal = document.getElementById('cartModal');
+    if (modal) {
+        modal.style.display = 'none';
+    }
+}
+
+function showNotification(message) {
+    const notification = document.getElementById('notification');
+    if (!notification) return;
+    
+    notification.textContent = message;
+    notification.style.display = 'block';
+    
+    setTimeout(() => {
+        notification.style.display = 'none';
+    }, 3000);
+}
+
+async function checkout() {
+    if (cart.length === 0) {
+        alert('Your cart is empty!');
+        return;
+    }
+
+    const cartData = {
+        items: cart.map(item => ({
+            name: item.name,
+            price: item.price,
+            quantity: item.quantity
+        })),
+        total: cart.reduce((sum, item) => sum + (item.price * item.quantity), 0)
+    };
+
+    // Option 1: Send to backend (you'll need a server)
+    // Option 2: Redirect to Stripe Checkout (requires backend setup)
+    
+    // For now, show a message and email instruction
+    const total = cartData.total.toFixed(2);
+    const itemsList = cart.map(item => `${item.name} x${item.quantity}`).join(', ');
+    
+    const mailtoLink = `mailto:fragnarity@gmail.com?subject=Order from Fragnarity - $${total}&body=I would like to order:%0A%0A${encodeURIComponent(itemsList)}%0A%0ATotal: $${total}%0A%0APlease confirm my order and provide payment instructions.`;
+    
+    window.location.href = mailtoLink;
+}
 
 // Render Products
 function renderProducts(filter = 'all') {
@@ -136,9 +277,10 @@ function renderProducts(filter = 'all') {
                 <div class="product-category">${categoryLabel}</div>
                 <div class="product-name">${fragrance.name}</div>
                 <div class="product-arabic">${fragrance.arabic}</div>
-                <div class="product-price">\$${fragrance.price}</div>
+                <div class="product-price">$${fragrance.price}</div>
                 <div class="product-description">${fragrance.description}</div>
                 <div class="product-season"><strong>Season:</strong> ${fragrance.season}</div>
+                <button onclick="addToCart(${fragrance.id})" class="btn-add-to-cart">🛒 Add to Cart</button>
             </div>
         `;
         productsGrid.appendChild(productCard);
@@ -147,14 +289,15 @@ function renderProducts(filter = 'all') {
 
 // Wait for DOM to be ready
 if (document.readyState === 'loading') {
-    document.addEventListener('DOMContentLoaded', initializeFilters);
+    document.addEventListener('DOMContentLoaded', initializeApp);
 } else {
-    initializeFilters();
+    initializeApp();
 }
 
-function initializeFilters() {
-    console.log('Initializing filters...');
+function initializeApp() {
+    console.log('Initializing app...');
     renderProducts('all');
+    updateCartIcon();
     
     const tabButtons = document.querySelectorAll('.tab-button');
     console.log('Found ' + tabButtons.length + ' tab buttons');
@@ -171,6 +314,14 @@ function initializeFilters() {
             const category = this.getAttribute('data-category');
             renderProducts(category);
         });
+    });
+
+    // Cart modal close on outside click
+    window.addEventListener('click', function(event) {
+        const modal = document.getElementById('cartModal');
+        if (modal && event.target == modal) {
+            closeCart();
+        }
     });
 }
 

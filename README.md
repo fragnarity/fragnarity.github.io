@@ -1,2 +1,38 @@
-# fragnarity.github.io
-Fragnarity redefines modern luxury by bridging elite craftsmanship with smart pricing. This repository powers our curated database, featuring detailed olfactory profiles, dynamic winter/summer climate tagging, and optimized inventory models built to bring high-tier, sophisticated scents to everyone.
+# Fragnarity - Luxury Fragrances
+
+**Where timeless luxury meets modern sophistication.**
+
+Fragnarity is a premium fragrance brand offering exceptional scents without the inflated designer price tag. Founded in 2024, our mission is to redefine luxury fragrance accessibility and build a global fragrance powerhouse.
+
+## 🌟 Features
+
+- **13 Premium Fragrances** - Each carefully crafted with unique scent profiles
+- **Affordable Luxury** - High-quality fragrances at accessible prices ($15-$30)
+- **Seasonal Recommendations** - Fragrances organized by season
+- **Arabic Heritage** - Names and descriptions celebrating Arabic fragrance traditions
+- **Responsive Design** - Beautiful website optimized for all devices
+
+## 📋 Our Collection
+
+Our fragrances include gourmand, floral, woody, and oriental scents:
+
+- **Khamrah** ($30) - Rich gourmand with cinnamon, dates, and vanilla
+- **Ana Abiyedh** ($15) - Fresh white musk with citrus notes
+- **Amira Al Arab** ($18) - Elegant feminine floral
+- **Eijazi Silver** ($20) - Masculine fresh citrus and cedarwood
+- **Bade'e Al Oud** ($28) - Bold oriental oud fragrance
+- And 8 more premium options!
+
+## 📞 Contact
+
+- **Email:** fragnarity@gmail.com
+- **Phone:** +961 71 470 722
+- **Instagram:** [@fragnarity](https://www.instagram.com/fragnarity?igsh=MWprYTBudDVkbG15ZQ==)
+
+## 🚀 Website
+
+Visit us at: `https://fragnarity.github.io`
+
+---
+
+*Elevate your everyday presence with a signature scent as bold as you are.*

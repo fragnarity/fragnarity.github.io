@@ -132,7 +132,7 @@ function renderProducts(filter = 'all') {
                 <div class="product-category">${categoryLabel}</div>
                 <div class="product-name">${fragrance.name}</div>
                 <div class="product-arabic">${fragrance.arabic}</div>
-                <div class="product-price">$${fragrance.price}</div>
+                <div class="product-price">\$${fragrance.price}</div>
                 <div class="product-description">${fragrance.description}</div>
                 <div class="product-season"><strong>Season:</strong> ${fragrance.season}</div>
             </div>

@@ -110,22 +110,26 @@ const fragrances = [
     }
 ];
 
-// Current filter
-let currentFilter = 'all';
-
 // Render Products
 function renderProducts(filter = 'all') {
     const productsGrid = document.getElementById('productsGrid');
+    if (!productsGrid) {
+        console.log('productsGrid not found');
+        return;
+    }
+    
     productsGrid.innerHTML = '';
     
     const filteredFragrances = filter === 'all' 
         ? fragrances 
         : fragrances.filter(f => f.category === filter);
     
+    console.log('Rendering ' + filteredFragrances.length + ' fragrances');
+    
     filteredFragrances.forEach(fragrance => {
         const productCard = document.createElement('div');
         productCard.className = 'product-card';
-        const categoryLabel = fragrance.category.charAt(0).toUpperCase() + fragrance.category.slice(1);
+        const categoryLabel = fragrance.category === 'unisex' ? 'Unisex' : (fragrance.category === 'men' ? 'Men' : 'Women');
         productCard.innerHTML = `
             <div class="product-image">🌹</div>
             <div class="product-content">
@@ -141,24 +145,34 @@ function renderProducts(filter = 'all') {
     });
 }
 
-// Tab button event listeners
-document.addEventListener('DOMContentLoaded', () => {
+// Wait for DOM to be ready
+if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', initializeFilters);
+} else {
+    initializeFilters();
+}
+
+function initializeFilters() {
+    console.log('Initializing filters...');
     renderProducts('all');
     
     const tabButtons = document.querySelectorAll('.tab-button');
+    console.log('Found ' + tabButtons.length + ' tab buttons');
+    
     tabButtons.forEach(button => {
-        button.addEventListener('click', () => {
+        button.addEventListener('click', function() {
+            console.log('Button clicked:', this.getAttribute('data-category'));
+            
             // Remove active class from all buttons
             tabButtons.forEach(btn => btn.classList.remove('active'));
             // Add active class to clicked button
-            button.classList.add('active');
+            this.classList.add('active');
             // Filter products
-            const category = button.getAttribute('data-category');
-            currentFilter = category;
+            const category = this.getAttribute('data-category');
             renderProducts(category);
         });
     });
-});
+}
 
 // Smooth Scrolling
 document.querySelectorAll('a[href^="#"]').forEach(anchor => {

@@ -16,11 +16,11 @@ Fragnarity is a premium fragrance brand offering exceptional scents without the 
 
 Our fragrances include gourmand, floral, woody, and oriental scents:
 
-- **Khamrah** ($30) - Rich gourmand with cinnamon, dates, and vanilla
-- **Ana Abiyedh** ($15) - Fresh white musk with citrus notes
-- **Amira Al Arab** ($18) - Elegant feminine floral
-- **Eijazi Silver** ($20) - Masculine fresh citrus and cedarwood
-- **Bade'e Al Oud** ($28) - Bold oriental oud fragrance
+- **Khamrah** - Rich gourmand with cinnamon, dates, and vanilla
+- **Ana Abiyedh** - Fresh white musk with citrus notes
+- **Amira Al Arab** - Elegant feminine floral
+- **Eijazi Silver** - Masculine fresh citrus and cedarwood
+- **Bade'e Al Oud** - Bold oriental oud fragrance
 - And 8 more premium options!
 
 ## 📞 Contact
